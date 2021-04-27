@@ -1,6 +1,6 @@
 <?php
 
-namespace VendorName\Skeleton\Tests;
+namespace Calkeo\Ddns\Tests;
 
 class ExampleTest extends TestCase
 {

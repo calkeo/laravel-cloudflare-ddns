@@ -1,6 +1,6 @@
 The MIT License (MIT)
 
-Copyright (c) :vendor_name <author@domain.com>
+Copyright (c) calkeo <48253321+calkeo@users.noreply.github.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

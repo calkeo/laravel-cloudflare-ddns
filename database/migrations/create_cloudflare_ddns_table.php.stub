@@ -1,0 +1,23 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class CreateDdnsTable extends Migration
+{
+    public function up()
+    {
+        Schema::create('cloudflare_ddns', function (Blueprint $table) {
+            $table->id();
+            $table->string('domain');
+            $table->string('record_name');
+            $table->string('record_type');
+            $table->string('record_ttl');
+            $table->ipAddress('ip_address');
+            $table->boolean('record_created');
+            $table->boolean('record_updated');
+            $table->timestamps();
+        });
+    }
+}

@@ -1,44 +1,38 @@
-# :package_description
+# Cloudflare Dynamic DNS syncing in Laravel
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/vendor_slug/package_slug.svg?style=flat-square)](https://packagist.org/packages/vendor_slug/package_slug)
-[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/vendor_slug/package_slug/run-tests?label=tests)](https://github.com/vendor_slug/package_slug/actions?query=workflow%3Arun-tests+branch%3Amaster)
-[![GitHub Code Style Action Status](https://img.shields.io/github/workflow/status/vendor_slug/package_slug/Check%20&%20fix%20styling?label=code%20style)](https://github.com/vendor_slug/package_slug/actions?query=workflow%3A"Check+%26+fix+styling"+branch%3Amaster)
-[![Total Downloads](https://img.shields.io/packagist/dt/vendor_slug/package_slug.svg?style=flat-square)](https://packagist.org/packages/vendor_slug/package_slug)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/calkeo/laravel_cloudflare_ddns.svg?style=flat-square)](https://packagist.org/packages/calkeo/laravel_cloudflare_ddns)
+[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/calkeo/laravel_cloudflare_ddns/run-tests?label=tests)](https://github.com/calkeo/laravel_cloudflare_ddns/actions?query=workflow%3Arun-tests+branch%3Amaster)
+[![GitHub Code Style Action Status](https://img.shields.io/github/workflow/status/calkeo/laravel_cloudflare_ddns/Check%20&%20fix%20styling?label=code%20style)](https://github.com/calkeo/laravel_cloudflare_ddns/actions?query=workflow%3A"Check+%26+fix+styling"+branch%3Amaster)
+[![Total Downloads](https://img.shields.io/packagist/dt/calkeo/laravel_cloudflare_ddns.svg?style=flat-square)](https://packagist.org/packages/calkeo/laravel_cloudflare_ddns)
 
-[](delete) 1) manually replace `:author_name, :author_username, auhor@domain.com, :vendor_name, vendor_slug, Vendor Name, :package_name, package_slug, skeleton, Skeleton, :package_description` with their correct values
-[](delete) in `CHANGELOG.md, LICENSE.md, README.md, ExampleTest.php, ModelFactory.php, Skeleton.php, SkeletonCommand.php, SkeletonFacade.php, SkeletonServiceProvider.php, TestCase.php, composer.json, create_skeleton_table.php.stub`
-[](delete) and delete `configure-skeleton.sh`
 
-[](delete) 2) You can also run `./configure-skeleton.sh` to do this automatically.
+This package facilitates dynamic DNS (DDNS) for Cloudflare with no third-party integrations. The package interacts directly with the Cloudflare API to sync the current system's IP address with your Cloudflare DNS records.
 
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
+## Use Cases
 
-## Support us
+This package can be used for multiple purposes. For instance:
 
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/package-skeleton-laravel.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/package-skeleton-laravel)
-
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
-
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
+- Running a server on your home network that you want to be accessible to the public.
+- Automatically updating your DNS records when you deploy or migrate a site to a new server.
 
 ## Installation
 
 You can install the package via composer:
 
 ```bash
-composer require vendor_slug/package_slug
+composer require calkeo/laravel_cloudflare_ddns
 ```
 
 You can publish and run the migrations with:
 
 ```bash
-php artisan vendor:publish --provider="VendorName\Skeleton\SkeletonServiceProvider" --tag="package_slug-migrations"
+php artisan vendor:publish --provider="Calkeo\Ddns\DdnsServiceProvider" --tag="laravel_cloudflare_ddns-migrations"
 php artisan migrate
 ```
 
 You can publish the config file with:
 ```bash
-php artisan vendor:publish --provider="VendorName\Skeleton\SkeletonServiceProvider" --tag="package_slug-config"
+php artisan vendor:publish --provider="Calkeo\Ddns\DdnsServiceProvider" --tag="laravel_cloudflare_ddns-config"
 ```
 
 This is the contents of the published config file:
@@ -51,8 +45,8 @@ return [
 ## Usage
 
 ```php
-$skeleton = new VendorName\Skeleton();
-echo $skeleton->echoPhrase('Hello, Spatie!');
+$laravel_cloudflare_ddns = new Calkeo\Ddns();
+echo $laravel_cloudflare_ddns->echoPhrase('Hello, Spatie!');
 ```
 
 ## Testing
@@ -60,6 +54,11 @@ echo $skeleton->echoPhrase('Hello, Spatie!');
 ```bash
 composer test
 ```
+
+## Roadmap
+- ✅ Support A record dynamic DNS
+- ⬜️ Add event broadcasting for DNS syncing
+
 
 ## Changelog
 
@@ -75,7 +74,7 @@ Please review [our security policy](../../security/policy) on how to report secu
 
 ## Credits
 
-- [:author_name](https://github.com/:author_username)
+- [Callum Keogan](https://github.com/calkeo)
 - [All Contributors](../../contributors)
 
 ## License
