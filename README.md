@@ -1,4 +1,4 @@
-# Cloudflare Dynamic DNS syncing in Laravel
+# Cloudflare Dynamic DNS with Laravel
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/calkeo/laravel_cloudflare_ddns.svg?style=flat-square)](https://packagist.org/packages/calkeo/laravel_cloudflare_ddns)
 [![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/calkeo/laravel_cloudflare_ddns/run-tests?label=tests)](https://github.com/calkeo/laravel_cloudflare_ddns/actions?query=workflow%3Arun-tests+branch%3Amaster)
@@ -15,51 +15,209 @@ This package can be used for multiple purposes. For instance:
 - Running a server on your home network that you want to be accessible to the public.
 - Automatically updating your DNS records when you deploy or migrate a site to a new server.
 
+## Prerequisites
+- PHP 8
+- Laravel 8
+
 ## Installation
 
-You can install the package via composer:
+Install the package via composer:
 
 ```bash
-composer require calkeo/laravel_cloudflare_ddns
+composer require calkeo/laravel-cloudflare-ddns
 ```
 
-You can publish and run the migrations with:
+Publish the config file and migrations:
 
 ```bash
-php artisan vendor:publish --provider="Calkeo\Ddns\DdnsServiceProvider" --tag="laravel_cloudflare_ddns-migrations"
+php artisan vendor:publish --provider="Calkeo\Ddns\DdnsServiceProvider" 
+```
+
+Run the migrations:
+
+```bash
 php artisan migrate
 ```
 
-You can publish the config file with:
-```bash
-php artisan vendor:publish --provider="Calkeo\Ddns\DdnsServiceProvider" --tag="laravel_cloudflare_ddns-config"
-```
+## Configuration
 
-This is the contents of the published config file:
+The configuration file can be found at `config/cloudflare_ddns`:
 
 ```php
 return [
+
+    /**
+     * The Cloudflare API token for the account that has privileges to manage the domains that you add to this file.
+     */
+    'cloudflare_api_token' => env('CLOUDFLARE_API_TOKEN'),
+
+    /**
+     * The amount of time in seconds that the public IP address is cached for each time the ddns:sync command is executed.
+     */
+    'cache_duration' => env('DDNS_CACHE_DURATION', 60),
+
+    /**
+     * The domains to sync with this system's IP address
+     */
+    'domains' => [
+        [
+            'domain'        => '', // The domain that the DNS records will be synced with.
+            'sync_interval' => 5, // The interval in minutes for which this domain's records will be updated
+            'records' => [
+                [
+                    'name' => '', // DNS record name
+                    'type' => '', // DNS record type
+                    'ttl' => 1, // Time to live for DNS record. Value of 1 is 'automatic'
+                    'proxied' => true, // Whether the DNS record is proxied through Cloudflare
+                ],
+            ],
+        ],
+    ],
+
 ];
 ```
 
+### `cloudflare_api_token`
+
+_(string)_
+
+A Cloudflare API token that has sufficient privileges to access the DNS records for the domains listed in the config file. [How to generate a Cloudflare API token](https://developers.cloudflare.com/api/tokens/create).
+
+---
+
+### `cache_duration`
+
+_(int)_
+
+The amount of time in seconds that the public IP address is cached for each time the `ddns:sync` command is executed.
+
+The IP address is automatically flushed from the cache each time the `ddns:sync` command is executed. Because an external network request has to be made in order to retrieve the public IP address, increasing the cache duration will increase performance.
+
+---
+
+### `domains[]`
+
+_(array)_
+
+The domains to be synced. A domain is referred to as a _Zone_ within Cloudflare.
+
+---
+
+### `domains[][domain]`
+
+_(string)_
+
+The base domain name, also referred to as the _Zone_. This must be the base of the domain as any subdomains will be configured within the `records` array.
+
+---
+
+### `domains[][sync_interval]`
+
+_(int)_
+
+How often (in minutes) the domain's DNS records will be synced with the server's public IP address.
+
+---
+
+### `domains[][records]`
+
+_(array)_
+
+The DNS records to be synced for the the domain.
+
+A record will be synced if there is already an existing DNS record in Cloudflare for this domain that matches the `type` and `name` specified for the record in the config file.
+
+---
+
+### `domains[][records][name]`
+
+_(string)_
+
+The DNS record name.
+
+For instance:
+
+- Record name `www` for `www.domain.com`
+- Record name `mysubdomain` for `mysubdomain.domain.com` 
+
+---
+
+### `domains[][records][type]`
+
+_(string)_
+
+The DNS record type. Valid types are:
+
+- `A`
+- `AAAA`
+- `CNAME`
+- `HTTPS`
+- `TXT`
+- `SRV`
+- `LOC`
+- `MX`
+- `NS`
+- `SPF`
+- `CERT`
+- `DNSKEY`
+- `DS`
+- `NAPTR`
+- `SMIMEA`
+- `SSHFP`
+- `SVCB`
+- `TLSA`
+- `URI`
+
+---
+
+### `domains[][records][ttl]`
+
+_(int)_
+
+The DNS record TTL (time-to-live). Setting this value to `1` sets the DNS record TTL to 'automatic'.
+
+---
+
+### `domains[][records][proxied]`
+
+_(bool)_
+
+Whether the DNS record should be proxied through Cloudflare's network.
+
+A brief explanation of Cloudflare DNS proxying ([source](https://community.cloudflare.com/t/what-is-the-difference-between-proxied-and-dns-only/173310)):
+
+> The DNS proxied means it will be shown a Cloudflare IP if you look it up. Thus all attacks at that domain will DDoS Cloudflare and not you host directly.
+>
+> Non proxied means all traffic goes directly to your own IP without Cloudflare being a safety net in front.
+>
+> The upside of proxied is that you will enjoy the Coudflare benefits but you can not make a direct connection to your IP, which means any custom ports wont work.
+>
+> Non proxied has the advantage of being able to use custom ports to connect as it will connect to your IP directly.
+
+__If you are using this package to setup DDNS for your home network__, you should take note from the above, that if you proxy your IP address through Cloudflare then you cannot use custom ports. [Read about the ports available whilst proxying through Cloudflare](https://support.cloudflare.com/hc/en-us/articles/200169156-Identifying-network-ports-compatible-with-Cloudflare-s-proxy).
+
+---
 ## Usage
 
+To continually sync your configured domains, it is recommended to create a scheduled task that runs the `ddns:sync` command every minute.
+
 ```php
-$laravel_cloudflare_ddns = new Calkeo\Ddns();
-echo $laravel_cloudflare_ddns->echoPhrase('Hello, Spatie!');
+// App/Console/Kernel.php
+
+protected function schedule(Schedule $schedule)
+{
+    $schedule->command('ddns:sync')->everyMinute();
+}
 ```
 
-## Testing
+The package will only sync with a domain in Cloudflare if the domain has not yet been synced, or if it is due to run based on the `sync_interval` value set for the domain in the config file.
 
-```bash
-composer test
-```
+An individual record will also not be updated if it is determined that there has been no change in IP address, and if the `ttl` and `proxied` values for the record in the config file are up-to-date in Cloudflare.
 
 ## Roadmap
 | Feature | Status |
 | ------- | ------ |
-| Dynamically update existing records | ✅ Completed |
-| Allow creation of new records | In Progress |
+| Allow creation of new records | Upcoming |
 | Support custom IP resolvers | Upcoming |
 | Event Broadcasting | Upcoming |
 
