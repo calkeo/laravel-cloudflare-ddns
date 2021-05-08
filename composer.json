@@ -37,11 +37,6 @@
             "Calkeo\\Ddns\\Tests\\": "tests"
         }
     },
-    "scripts": {
-        "psalm": "vendor/bin/psalm",
-        "test": "./vendor/bin/testbench package:test --parallel --no-coverage",
-        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
-    },
     "config": {
         "sort-packages": true
     },
@@ -49,10 +44,7 @@
         "laravel": {
             "providers": [
                 "Calkeo\\Ddns\\DdnsServiceProvider"
-            ],
-            "aliases": {
-                "Ddns": "Calkeo\\Ddns\\DdnsFacade"
-            }
+            ]
         }
     },
     "minimum-stability": "dev",
