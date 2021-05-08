@@ -2,9 +2,9 @@
 
 namespace Calkeo\Ddns\Tests;
 
+use Calkeo\Ddns\DdnsServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
-use Calkeo\Ddns\DdnsServiceProvider;
 
 class TestCase extends Orchestra
 {

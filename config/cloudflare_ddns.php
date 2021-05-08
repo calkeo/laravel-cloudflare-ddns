@@ -19,16 +19,16 @@ return [
     'cache_duration' => env('DDNS_CACHE_DURATION', 60),
 
     /**
-     * The domains to sync with this system's IP address
+     * The domains to sync with this system's IP address.
      */
     'domains' => [
         [
             'domain'        => '', // The domain that the DNS records will be synced with.
-            'records' => [
+            'records'       => [
                 [
-                    'name' => '', // DNS record name
-                    'type' => '', // DNS record type
-                    'ttl' => 1, // Time to live for DNS record. Value of 1 is 'automatic'
+                    'name'    => '', // DNS record name
+                    'type'    => '', // DNS record type
+                    'ttl'     => 1, // Time to live for DNS record. Value of 1 is 'automatic'
                     'proxied' => true, // Whether the DNS record is proxied through Cloudflare
                 ],
             ],
