@@ -25,7 +25,7 @@ class CloudflareApi
         $matchingRecords = array_filter($cfRecords, function ($r) use ($domain, $record) {
             return
                 $r['type'] === $record['type'] &&
-                $r['name'] === $record['name'] . '.' . $domain;
+                $r['name'] === $record['name'].'.'.$domain;
         });
 
         $matchingRecords = array_merge($matchingRecords);
@@ -52,14 +52,17 @@ class CloudflareApi
      */
     public static function updateRecord(array $cfRecord, array $record): array
     {
-        return static::request('put',
-            "zones/{$cfRecord['zone_id']}/dns_records/{$cfRecord['id']}", [
-                'type' => $record['type'],
-                'name' => $cfRecord['name'],
+        return static::request(
+            'put',
+            "zones/{$cfRecord['zone_id']}/dns_records/{$cfRecord['id']}",
+            [
+                'type'    => $record['type'],
+                'name'    => $cfRecord['name'],
                 'content' => PublicIp::get(),
-                'ttl' => $record['ttl'],
+                'ttl'     => $record['ttl'],
                 'proxied' => $record['proxied'],
-            ]);
+            ]
+        );
     }
 
     /**
@@ -69,11 +72,10 @@ class CloudflareApi
         string $method,
         string $path,
         ?array $data = []
-    ): array
-    {
+    ): array {
         $response =
         Http::withToken(config('cloudflare_ddns.cloudflare_api_token'))
-            ->$method(static::API_BASE . $path, $data);
+            ->$method(static::API_BASE.$path, $data);
 
         if ($response->failed()) {
             $errorMessage = $response->json()['errors'][0]['message'] ?? 'Cloudflare API request failed';
