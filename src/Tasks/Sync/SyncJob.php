@@ -10,15 +10,11 @@ use Illuminate\Support\Facades\Validator;
 
 class SyncJob
 {
-    protected $cloudFlareApiToken;
-
     protected $domains;
 
-    protected $siteSyncCount;
+    public $domainSyncCount = 0;
 
-    protected $recordSyncCount;
-
-    protected $missingRecordCount;
+    public $recordSyncCount = 0;
 
     public function __construct()
     {
@@ -108,6 +104,7 @@ class SyncJob
 
             if (!$dbRecord || static::dueSync($domain, $dbRecord)) {
                 $this->syncDomain($domain);
+                $this->domainSyncCount++;
 
                 DB::table('cloudflare_ddns')->updateOrInsert(
                     ['domain' => $domain['domain']],
@@ -128,8 +125,9 @@ class SyncJob
         foreach ($domain['records'] as $record) {
             $cfRecord = CloudflareRecord::get($domain['domain'], $record);
 
-            if ($cfRecord) {
+            if ($cfRecord && $cfRecord->isDifferentTo($record)) {
                 $cfRecord->update($record);
+                $this->recordSyncCount++;
             }
         }
     }

@@ -3,6 +3,7 @@
 namespace Calkeo\Ddns\Models;
 
 use Calkeo\Ddns\CloudflareApi\CloudflareApi;
+use Calkeo\Ddns\Tasks\PublicIp;
 
 class CloudflareRecord
 {
@@ -36,5 +37,22 @@ class CloudflareRecord
     public function update(array $fields): void
     {
         $response = CloudflareApi::updateRecord($this->cfRecord, $fields);
+    }
+
+    /**
+     * Determines whether the Cloudflare record contains the same information as the given record array
+     *
+     * @param  array  $record
+     * @return bool
+     */
+    public function isDifferentTo(array $record): bool
+    {
+        return (
+            $this->cfRecord['content'] !== PublicIp::get()
+            ||
+            $this->cfRecord['ttl'] !== $record['ttl']
+            ||
+            $this->cfRecord['proxied'] !== $record['proxied']
+        );
     }
 }
