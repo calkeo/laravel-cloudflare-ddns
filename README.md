@@ -14,8 +14,8 @@ This package can be used for multiple purposes. For instance:
 - Automatically updating your DNS records when you deploy or migrate a site to a new server.
 
 ## Prerequisites
-- PHP 8
-- Laravel 8
+- PHP >= 8.0
+- Laravel >= 8
 
 ## Installation
 

@@ -6,7 +6,7 @@ use Exception;
 
 class InvalidConfigurationException extends Exception
 {
-    public static function invalidData(array $errors): self
+    public static function invalidData(array $errors): static
     {
         $output = 'Invalid Cloudflare DDNS configuration:';
 

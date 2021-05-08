@@ -6,7 +6,7 @@ use Exception;
 
 class PublicIpException extends Exception
 {
-    public static function failedApiRequest(string $message): self
+    public static function failedApiRequest(string $message): static
     {
         return new static($message);
     }

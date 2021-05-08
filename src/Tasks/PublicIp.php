@@ -10,19 +10,18 @@ class PublicIp
 {
     /**
      * Gets the public IP address.
-     *
-     * @return string
      */
-    public static function get()
+    public static function get(): string
     {
-        return Cache::remember('laravelCloudflareDdnsPublicIp', config('cloudflare_ddns.cache_duration'), function () {
-            $ipifyResponse = Http::get('https://api.ipify.org?format=json');
+        return Cache::remember('laravelCloudflareDdnsPublicIp',
+            config('cloudflare_ddns.cache_duration'), function () {
+                $ipifyResponse = Http::get('https://api.ipify.org?format=json');
 
-            if ($ipifyResponse->successful()) {
-                return $ipifyResponse->json()['ip'];
-            }
+                if ($ipifyResponse->successful()) {
+                    return $ipifyResponse->json()['ip'];
+                }
 
-            throw PublicIpException::failedApiRequest('Failed to get server IP address');
-        });
+                throw PublicIpException::failedApiRequest(message:'Failed to get server IP address');
+            });
     }
 }

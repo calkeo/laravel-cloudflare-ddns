@@ -7,54 +7,45 @@ use Calkeo\Ddns\Tasks\PublicIp;
 
 class CloudflareRecord
 {
-    protected $cfRecord;
 
-    private function __construct(array $cfRecord)
-    {
-        $this->cfRecord = $cfRecord;
-    }
+    private function __construct(
+        public array $cfRecord
+    ) {}
 
     /**
      * Retrieves the record from Cloudflare.
-     *
-     * @param string $domain
-     * @param array  $record
-     *
-     * @return mixed
      */
-    public static function get(string $domain, array $record)
+    public static function get(string $domain, array $record): ?static
     {
-        $cfRecord = CloudflareApi::getRecord($domain, $record);
+        $cfRecord = CloudflareApi::getRecord(
+            domain:$domain,
+            record:$record
+        );
 
-        return $cfRecord ? new static($cfRecord) : false;
+        return $cfRecord ? new static($cfRecord) : null;
     }
 
     /**
      * Updates the record in Cloudflare.
-     *
-     * @param array $fields
-     *
-     * @return void
      */
     public function update(array $fields): void
     {
-        $response = CloudflareApi::updateRecord($this->cfRecord, $fields);
+        $response = CloudflareApi::updateRecord(
+            cfRecord:$this->cfRecord,
+            record:$fields,
+        );
     }
 
     /**
      * Determines whether the Cloudflare record contains the same information as the given record array.
-     *
-     * @param array $record
-     *
-     * @return bool
      */
     public function isDifferentTo(array $record): bool
     {
         return
-            $this->cfRecord['content'] !== PublicIp::get()
-            ||
-            $this->cfRecord['ttl'] !== $record['ttl']
-            ||
-            $this->cfRecord['proxied'] !== $record['proxied'];
+        $this->cfRecord['content'] !== PublicIp::get()
+        ||
+        $this->cfRecord['ttl'] !== $record['ttl']
+        ||
+        $this->cfRecord['proxied'] !== $record['proxied'];
     }
 }
