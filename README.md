@@ -1,7 +1,6 @@
 # Cloudflare Dynamic DNS with Laravel
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/calkeo/laravel-cloudflare-ddns.svg?style=flat-square)](https://packagist.org/packages/calkeo/laravel-cloudflare-ddns)
-[![Total Downloads](https://img.shields.io/packagist/dt/calkeo/laravel-cloudflare-ddns.svg?style=flat-square)](https://packagist.org/packages/calkeo/laravel-cloudflare-ddns)
+[![Latest Stable Version](https://poser.pugx.org/calkeo/laravel-cloudflare-ddns/v)](//packagist.org/packages/calkeo/laravel-cloudflare-ddns) [![Total Downloads](https://poser.pugx.org/calkeo/laravel-cloudflare-ddns/downloads)](//packagist.org/packages/calkeo/laravel-cloudflare-ddns) [![License](https://poser.pugx.org/calkeo/laravel-cloudflare-ddns/license)](//packagist.org/packages/calkeo/laravel-cloudflare-ddns)
 [![GitHub Code Style Action Status](https://github.styleci.io/repos/361263220/shield)](https://github.com/calkeo/laravel-cloudflare-ddns/actions?query=workflow%3A"Check+%26+fix+styling"+branch%3Amaster)
 
 
