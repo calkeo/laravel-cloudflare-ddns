@@ -1,9 +1,8 @@
 # Cloudflare Dynamic DNS with Laravel
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/calkeo/laravel_cloudflare_ddns.svg?style=flat-square)](https://packagist.org/packages/calkeo/laravel_cloudflare_ddns)
-[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/calkeo/laravel_cloudflare_ddns/run-tests?label=tests)](https://github.com/calkeo/laravel_cloudflare_ddns/actions?query=workflow%3Arun-tests+branch%3Amaster)
-[![GitHub Code Style Action Status](https://img.shields.io/github/workflow/status/calkeo/laravel_cloudflare_ddns/Check%20&%20fix%20styling?label=code%20style)](https://github.com/calkeo/laravel_cloudflare_ddns/actions?query=workflow%3A"Check+%26+fix+styling"+branch%3Amaster)
-[![Total Downloads](https://img.shields.io/packagist/dt/calkeo/laravel_cloudflare_ddns.svg?style=flat-square)](https://packagist.org/packages/calkeo/laravel_cloudflare_ddns)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/calkeo/laravel-cloudflare-ddns.svg?style=flat-square)](https://packagist.org/packages/calkeo/laravel-cloudflare-ddns)
+[![Total Downloads](https://img.shields.io/packagist/dt/calkeo/laravel-cloudflare-ddns.svg?style=flat-square)](https://packagist.org/packages/calkeo/laravel-cloudflare-ddns)
+[![GitHub Code Style Action Status](https://github.styleci.io/repos/361263220/shield)](https://github.com/calkeo/laravel-cloudflare-ddns/actions?query=workflow%3A"Check+%26+fix+styling"+branch%3Amaster)
 
 
 This package facilitates dynamic DNS (DDNS) for Cloudflare with no third-party integrations. The package interacts directly with the Cloudflare API to sync the current system's IP address with your Cloudflare DNS records.
@@ -87,7 +86,7 @@ A Cloudflare API token that has sufficient privileges to access the DNS records 
 
 ### `cache_duration`
 
-_(int)_
+_(integer)_
 
 The amount of time in seconds that the public IP address is cached for each time the `ddns:sync` command is executed.
 
@@ -113,7 +112,7 @@ The base domain name, also referred to as the _Zone_. This must be the base of t
 
 ### `domains[][sync_interval]`
 
-_(int)_
+_(integer)_
 
 How often (in minutes) the domain's DNS records will be synced with the server's public IP address.
 
@@ -172,7 +171,7 @@ The DNS record type. Valid types are:
 
 ### `domains[][records][ttl]`
 
-_(int)_
+_(integer)_
 
 The DNS record TTL (time-to-live). Setting this value to `1` sets the DNS record TTL to 'automatic'.
 
@@ -180,7 +179,7 @@ The DNS record TTL (time-to-live). Setting this value to `1` sets the DNS record
 
 ### `domains[][records][proxied]`
 
-_(bool)_
+_(boolean)_
 
 Whether the DNS record should be proxied through Cloudflare's network.
 
