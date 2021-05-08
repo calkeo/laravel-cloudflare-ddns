@@ -23,7 +23,7 @@ class SyncJob
     }
 
     /**
-     * Retrieves the config file, validates it and assigns values to class attributes
+     * Retrieves the config file, validates it and assigns values to class attributes.
      *
      * @return void
      */
@@ -91,7 +91,7 @@ class SyncJob
     }
 
     /**
-     * Starts the DDNS sync
+     * Starts the DDNS sync.
      *
      * @return void
      */
@@ -115,9 +115,10 @@ class SyncJob
     }
 
     /**
-     * Syncs the domain's records
+     * Syncs the domain's records.
      *
-     * @param  array  $domain
+     * @param array $domain
+     *
      * @return void
      */
     private function syncDomain(array $domain): void
@@ -133,10 +134,11 @@ class SyncJob
     }
 
     /**
-     * Determines whether the domain is due for syncing
+     * Determines whether the domain is due for syncing.
      *
-     * @param  array      $domain
-     * @param  Collection $dbRecord
+     * @param array      $domain
+     * @param Collection $dbRecord
+     *
      * @return bool
      */
     private static function dueSync(array $domain, $dbRecord)
