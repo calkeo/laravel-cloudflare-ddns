@@ -14,6 +14,5 @@ class DdnsCommand extends Command
     public function handle()
     {
         $sync = new SyncJob();
-        $this->comment("Synchronised DNS for {$sync->siteSyncCount} domains and {$sync->recordSyncCount} records");
     }
 }

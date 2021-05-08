@@ -4,6 +4,7 @@ namespace Calkeo\Ddns\CloudflareApi;
 
 use Calkeo\Ddns\CloudflareApi\CloudflareRequest;
 use Calkeo\Ddns\Exceptions\CloudflareApiException;
+use Calkeo\Ddns\Tasks\PublicIp;
 use Illuminate\Support\Facades\Http;
 
 class CloudflareApi
@@ -13,7 +14,7 @@ class CloudflareApi
     /**
      * Gets the current DNS record
      *
-     * @array $fields
+     * @param array $fields
      */
     public static function getRecord($fields)
     {
@@ -21,7 +22,15 @@ class CloudflareApi
 
         $records = static::request('get', "zones/{$zone['id']}/dns_records");
 
-        //
+        $matchingRecords = array_filter($records, function ($r) use ($fields) {
+            return
+                $r['type'] === $fields['records']['type'] &&
+                $r['name'] === $fields['records']['name'] . '.' . $fields['domain'];
+        });
+
+        $matchingRecords = array_merge($matchingRecords);
+
+        return $matchingRecords[0] ?? false;
     }
 
     /**
@@ -34,6 +43,24 @@ class CloudflareApi
     {
         return static::request('get', 'zones', [
             'name' => $domain,
+        ]);
+    }
+
+    /**
+     * Updates the Cloudflare record
+     *
+     * @param  string  $record
+     * @param  array   $fields
+     * @return array
+     */
+    public static function updateRecord(array $record, array $fields): array
+    {
+        return static::request('put', "zones/{$record['zone_id']}/dns_records/{$record['id']}", [
+            'type'    => $fields['records']['type'],
+            'name'    => $record['name'],
+            'content' => PublicIp::get(),
+            'ttl'     => $fields['records']['ttl'],
+            'proxied' => $fields['records']['proxied'],
         ]);
     }
 

@@ -23,23 +23,17 @@ class CloudflareRecord
     {
         $cfRecord = CloudflareApi::getRecord($fields);
 
-        return $cfRecord ? new static($cfRecord) : $this->handleMissingRecord($fields);
+        return $cfRecord ? new static($cfRecord) : false;
     }
 
     /**
-     * Handle a missing Cloudflare record
+     * Updates the record in Cloudflare
      *
-     * @param  array   $fields
-     * @return mixed
+     * @param  array  $fields
+     * @return void
      */
-    private function handleMissingRecord(array $fields)
+    public function update(array $fields): void
     {
-        if ($fields['create_if_missing']) {
-            return $this->createRecord();
-        } elseif ($fields['error_on_missing']) {
-            throw Exception();
-        }
-
-        return false;
+        $response = CloudflareApi::updateRecord($this->cfRecord, $fields);
     }
 }

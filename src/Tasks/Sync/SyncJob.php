@@ -4,6 +4,7 @@ namespace Calkeo\Ddns\Tasks\Sync;
 
 use Calkeo\Ddns\Exceptions\InvalidConfigurationException;
 use Calkeo\Ddns\Models\CloudflareRecord;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
 
 class SyncJob
@@ -38,6 +39,11 @@ class SyncJob
                 'required',
                 'string',
             ],
+            'cache_duration'                      => [
+                'required',
+                'integer',
+                'min:0',
+            ],
             'domains'                             => [
                 'required',
                 'array',
@@ -63,6 +69,10 @@ class SyncJob
             'domains.*.records.ttl'               => [
                 'required',
                 'integer',
+            ],
+            'domains.*.records.proxied'           => [
+                'required',
+                'boolean',
             ],
             'domains.*.records.create_if_missing' => [
                 'required',
@@ -90,6 +100,8 @@ class SyncJob
      */
     private function run(): void
     {
+        Cache::forget('laravelCloudflareDdnsPublicIp');
+
         foreach ($this->domains as $domain) {
             $this->syncDomain($domain);
         }
@@ -106,7 +118,7 @@ class SyncJob
         $cfRecord = CloudflareRecord::get($domain);
 
         if ($cfRecord) {
-            $cfRecord->update();
+            $cfRecord->update($domain);
         }
     }
 }
