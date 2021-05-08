@@ -28,7 +28,7 @@ return [
                 [
                     'name' => '', // DNS record name
                     'type' => '', // DNS record type
-                    'ttl' => 1,
+                    'ttl'  => 1,
                     // Time to live for DNS record. Value of 1 is 'automatic'
                     'proxied' => true,
                     // Whether the DNS record is proxied through Cloudflare
