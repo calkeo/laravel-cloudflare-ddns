@@ -5,6 +5,7 @@ namespace Calkeo\Ddns\Tasks\Sync;
 use Calkeo\Ddns\Exceptions\InvalidConfigurationException;
 use Calkeo\Ddns\Models\CloudflareRecord;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class SyncJob
@@ -103,7 +104,16 @@ class SyncJob
         Cache::forget('laravelCloudflareDdnsPublicIp');
 
         foreach ($this->domains as $domain) {
-            $this->syncDomain($domain);
+            $dbRecord = DB::table('cloudflare_ddns')->where('domain', $domain['domain'])->first();
+
+            if (!$dbRecord || static::dueSync($domain, $dbRecord)) {
+                $this->syncDomain($domain);
+
+                DB::table('cloudflare_ddns')->updateOrInsert(
+                    ['domain' => $domain['domain']],
+                    ['last_sync' => now()]
+                );
+            }
         }
     }
 
@@ -122,5 +132,17 @@ class SyncJob
                 $cfRecord->update($record);
             }
         }
+    }
+
+    /**
+     * Determines whether the domain is due for syncing
+     *
+     * @param  array      $domain
+     * @param  Collection $dbRecord
+     * @return bool
+     */
+    private static function dueSync(array $domain, $dbRecord)
+    {
+        return now()->diffInMinutes($dbRecord->last_sync) > $domain['sync_interval'];
     }
 }
