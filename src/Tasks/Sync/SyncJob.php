@@ -35,46 +35,46 @@ class SyncJob
         $options = config('cloudflare_ddns');
 
         $validator = Validator::make($options, [
-            'cloudflare_api_token'                => [
+            'cloudflare_api_token'                  => [
                 'required',
                 'string',
             ],
-            'cache_duration'                      => [
+            'cache_duration'                        => [
                 'required',
                 'integer',
                 'min:0',
             ],
-            'domains'                             => [
+            'domains'                               => [
                 'required',
                 'array',
                 'min:1',
             ],
-            'domains.*.domain'                    => [
+            'domains.*.domain'                      => [
                 'required',
                 'string',
             ],
-            'domains.*.records'                   => [
+            'domains.*.records'                     => [
                 'required',
                 'array',
                 'min:1',
             ],
-            'domains.*.records.name'              => [
+            'domains.*.records.*.name'              => [
                 'required',
                 'string',
             ],
-            'domains.*.records.type'              => [
+            'domains.*.records.*.type'              => [
                 'required',
                 'string',
             ],
-            'domains.*.records.ttl'               => [
+            'domains.*.records.*.ttl'               => [
                 'required',
                 'integer',
             ],
-            'domains.*.records.proxied'           => [
+            'domains.*.records.*.proxied'           => [
                 'required',
                 'boolean',
             ],
-            'domains.*.records.create_if_missing' => [
+            'domains.*.records.*.create_if_missing' => [
                 'required',
                 'boolean',
             ],
@@ -115,10 +115,12 @@ class SyncJob
      */
     private function syncDomain(array $domain): void
     {
-        $cfRecord = CloudflareRecord::get($domain);
+        foreach ($domain['records'] as $record) {
+            $cfRecord = CloudflareRecord::get($domain['domain'], $record);
 
-        if ($cfRecord) {
-            $cfRecord->update($domain);
+            if ($cfRecord) {
+                $cfRecord->update($record);
+            }
         }
     }
 }

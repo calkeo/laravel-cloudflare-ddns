@@ -16,12 +16,13 @@ class CloudflareRecord
     /**
      * Retrieves the record from Cloudflare
      *
-     * @param  array   $fields
+     * @param  string  $domain
+     * @param  array   $record
      * @return mixed
      */
-    public static function get(array $fields)
+    public static function get(string $domain, array $record)
     {
-        $cfRecord = CloudflareApi::getRecord($fields);
+        $cfRecord = CloudflareApi::getRecord($domain, $record);
 
         return $cfRecord ? new static($cfRecord) : false;
     }

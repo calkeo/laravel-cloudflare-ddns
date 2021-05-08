@@ -14,18 +14,19 @@ class CloudflareApi
     /**
      * Gets the current DNS record
      *
-     * @param array $fields
+     * @param string $domain
+     * @param array  $record
      */
-    public static function getRecord($fields)
+    public static function getRecord(string $domain, array $record)
     {
-        $zone = static::getZone($fields['domain'])[0];
+        $zone = static::getZone($domain)[0];
 
-        $records = static::request('get', "zones/{$zone['id']}/dns_records");
+        $cfRecords = static::request('get', "zones/{$zone['id']}/dns_records");
 
-        $matchingRecords = array_filter($records, function ($r) use ($fields) {
+        $matchingRecords = array_filter($cfRecords, function ($r) use ($domain, $record) {
             return
-                $r['type'] === $fields['records']['type'] &&
-                $r['name'] === $fields['records']['name'] . '.' . $fields['domain'];
+                $r['type'] === $record['type'] &&
+                $r['name'] === $record['name'] . '.' . $domain;
         });
 
         $matchingRecords = array_merge($matchingRecords);
@@ -49,18 +50,18 @@ class CloudflareApi
     /**
      * Updates the Cloudflare record
      *
-     * @param  string  $record
-     * @param  array   $fields
+     * @param  string  $cfRecord
+     * @param  array   $record
      * @return array
      */
-    public static function updateRecord(array $record, array $fields): array
+    public static function updateRecord(array $cfRecord, array $record): array
     {
-        return static::request('put', "zones/{$record['zone_id']}/dns_records/{$record['id']}", [
-            'type'    => $fields['records']['type'],
-            'name'    => $record['name'],
+        return static::request('put', "zones/{$cfRecord['zone_id']}/dns_records/{$cfRecord['id']}", [
+            'type'    => $record['type'],
+            'name'    => $cfRecord['name'],
             'content' => PublicIp::get(),
-            'ttl'     => $fields['records']['ttl'],
-            'proxied' => $fields['records']['proxied'],
+            'ttl'     => $record['ttl'],
+            'proxied' => $record['proxied'],
         ]);
     }
 

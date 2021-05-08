@@ -4,7 +4,7 @@ namespace Calkeo\Ddns\Exceptions;
 
 use Exception;
 
-class InvalidConfiguration extends Exception
+class InvalidConfigurationException extends Exception
 {
     public static function invalidData(array $errors): self
     {

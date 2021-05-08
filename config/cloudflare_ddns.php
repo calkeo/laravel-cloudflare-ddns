@@ -25,12 +25,14 @@ return [
         [
             'domain'        => '', // The domain that the DNS records will be synced with.
             'records' => [
-                'name' => '', // DNS record name
-                'type' => '', // DNS record type
-                'ttl' => 1, // Time to live for DNS record. Value of 1 is 'automatic'
-                'proxied' => true, // Whether the DNS record is proxied through Cloudflare
-                'create_if_missing' => false, // Whether the record will be created automatically if it doesn't already exist
-                'exception_if_missing' => true, // Whether missing records will throw an exception if they are missing //TODO: Document that this is overwritten  by the above setting
+                [
+                    'name' => '', // DNS record name
+                    'type' => '', // DNS record type
+                    'ttl' => 1, // Time to live for DNS record. Value of 1 is 'automatic'
+                    'proxied' => true, // Whether the DNS record is proxied through Cloudflare
+                    'create_if_missing' => false, // Whether the record will be created automatically if it doesn't already exist
+                    'exception_if_missing' => true, // Whether missing records will throw an exception if they are missing //TODO: Document that this is overwritten  by the above setting
+                ],
             ],
             'sync_interval' => 5, // The interval in minutes for which this domain's records will be updated
         ],

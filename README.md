@@ -56,9 +56,12 @@ composer test
 ```
 
 ## Roadmap
-- ✅ Support A record dynamic DNS
-- ⬜️ Add event broadcasting for DNS syncing
-
+| Feature | Status |
+| ------- | ------ |
+| Dynamically update existing records | ✅ Completed |
+| Allow creation of new records | In Progress |
+| Support custom IP resolvers | Upcoming |
+| Event Broadcasting | Upcoming |
 
 ## Changelog
 
