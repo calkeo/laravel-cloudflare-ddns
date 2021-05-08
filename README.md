@@ -127,7 +127,7 @@ How often (in minutes) the domain's DNS records will be synced with the server's
 
 _(array)_
 
-The DNS records to be synced for the the domain.
+The DNS records to be synced for the domain.
 
 A record will be synced if there is already an existing DNS record in Cloudflare for this domain that matches the `type` and `name` specified for the record in the config file.
 

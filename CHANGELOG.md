@@ -2,6 +2,6 @@
 
 All notable changes to `laravel-cloudflare-ddns` will be documented in this file.
 
-## 1.0.0 - 202X-XX-XX
+## 0.1.0
 
-- initial release
+- Initial beta releaese
