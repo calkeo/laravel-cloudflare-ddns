@@ -7,10 +7,10 @@ use Calkeo\Ddns\Tasks\PublicIp;
 
 class CloudflareRecord
 {
-
     private function __construct(
         public array $cfRecord
-    ) {}
+    ) {
+    }
 
     /**
      * Retrieves the record from Cloudflare.

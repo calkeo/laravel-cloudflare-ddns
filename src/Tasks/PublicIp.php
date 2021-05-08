@@ -13,8 +13,10 @@ class PublicIp
      */
     public static function get(): string
     {
-        return Cache::remember('laravelCloudflareDdnsPublicIp',
-            config('cloudflare_ddns.cache_duration'), function () {
+        return Cache::remember(
+            'laravelCloudflareDdnsPublicIp',
+            config('cloudflare_ddns.cache_duration'),
+            function () {
                 $ipifyResponse = Http::get('https://api.ipify.org?format=json');
 
                 if ($ipifyResponse->successful()) {
@@ -22,6 +24,7 @@ class PublicIp
                 }
 
                 throw PublicIpException::failedApiRequest(message:'Failed to get server IP address');
-            });
+            }
+        );
     }
 }

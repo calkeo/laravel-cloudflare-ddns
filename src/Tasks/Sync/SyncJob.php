@@ -75,10 +75,10 @@ class SyncJob
             ],
         ], [
             'required' => ':attribute is required',
-            'string' => ':attribute must be a string',
-            'array' => ':attribute must be an array',
-            'min' => ':attribute must have at least :min element',
-            'integer' => ':attribute must be an integer',
+            'string'   => ':attribute must be a string',
+            'array'    => ':attribute must be an array',
+            'min'      => ':attribute must have at least :min element',
+            'integer'  => ':attribute must be an integer',
         ]);
 
         if ($validator->fails()) {
@@ -96,8 +96,10 @@ class SyncJob
         Cache::forget('laravelCloudflareDdnsPublicIp');
 
         foreach ($this->domains as $domain) {
-            $dbRecord = DB::table('cloudflare_ddns')->where('domain',
-                $domain['domain'])->first();
+            $dbRecord = DB::table('cloudflare_ddns')->where(
+                'domain',
+                $domain['domain']
+            )->first();
 
             if (!$dbRecord || static::dueSync(domain:$domain, dbRecord:$dbRecord)) {
                 $this->syncDomain(domain:$domain);
