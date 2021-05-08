@@ -15,10 +15,11 @@ class CloudflareRecord
     }
 
     /**
-     * Retrieves the record from Cloudflare
+     * Retrieves the record from Cloudflare.
      *
-     * @param  string  $domain
-     * @param  array   $record
+     * @param string $domain
+     * @param array  $record
+     *
      * @return mixed
      */
     public static function get(string $domain, array $record)
@@ -29,9 +30,10 @@ class CloudflareRecord
     }
 
     /**
-     * Updates the record in Cloudflare
+     * Updates the record in Cloudflare.
      *
-     * @param  array  $fields
+     * @param array $fields
+     *
      * @return void
      */
     public function update(array $fields): void
@@ -40,19 +42,19 @@ class CloudflareRecord
     }
 
     /**
-     * Determines whether the Cloudflare record contains the same information as the given record array
+     * Determines whether the Cloudflare record contains the same information as the given record array.
      *
-     * @param  array  $record
+     * @param array $record
+     *
      * @return bool
      */
     public function isDifferentTo(array $record): bool
     {
-        return (
+        return
             $this->cfRecord['content'] !== PublicIp::get()
             ||
             $this->cfRecord['ttl'] !== $record['ttl']
             ||
-            $this->cfRecord['proxied'] !== $record['proxied']
-        );
+            $this->cfRecord['proxied'] !== $record['proxied'];
     }
 }

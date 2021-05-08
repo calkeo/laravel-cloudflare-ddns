@@ -2,17 +2,16 @@
 
 namespace Calkeo\Ddns\CloudflareApi;
 
-use Calkeo\Ddns\CloudflareApi\CloudflareRequest;
 use Calkeo\Ddns\Exceptions\CloudflareApiException;
 use Calkeo\Ddns\Tasks\PublicIp;
 use Illuminate\Support\Facades\Http;
 
 class CloudflareApi
 {
-    const API_BASE = "https://api.cloudflare.com/client/v4/";
+    const API_BASE = 'https://api.cloudflare.com/client/v4/';
 
     /**
-     * Gets the current DNS record
+     * Gets the current DNS record.
      *
      * @param string $domain
      * @param array  $record
@@ -26,7 +25,7 @@ class CloudflareApi
         $matchingRecords = array_filter($cfRecords, function ($r) use ($domain, $record) {
             return
                 $r['type'] === $record['type'] &&
-                $r['name'] === $record['name'] . '.' . $domain;
+                $r['name'] === $record['name'].'.'.$domain;
         });
 
         $matchingRecords = array_merge($matchingRecords);
@@ -35,9 +34,10 @@ class CloudflareApi
     }
 
     /**
-     * Gets the Cloudflare zone from the domain name
+     * Gets the Cloudflare zone from the domain name.
      *
-     * @param  string  $domain
+     * @param string $domain
+     *
      * @return array
      */
     public static function getZone(string $domain): array
@@ -48,10 +48,11 @@ class CloudflareApi
     }
 
     /**
-     * Updates the Cloudflare record
+     * Updates the Cloudflare record.
      *
-     * @param  string  $cfRecord
-     * @param  array   $record
+     * @param string $cfRecord
+     * @param array  $record
+     *
      * @return array
      */
     public static function updateRecord(array $cfRecord, array $record): array
@@ -66,16 +67,17 @@ class CloudflareApi
     }
 
     /**
-     * Cloudflare API request base
+     * Cloudflare API request base.
      *
-     * @param  string                            $method
-     * @param  string                            $path
-     * @param  string                            $data
+     * @param string $method
+     * @param string $path
+     * @param string $data
+     *
      * @return Illuminate\Support\Facades\Http
      */
     public static function request(string $method, string $path, array $data = [])
     {
-        $response = Http::withToken(config('cloudflare_ddns.cloudflare_api_token'))->$method(static::API_BASE . $path, $data);
+        $response = Http::withToken(config('cloudflare_ddns.cloudflare_api_token'))->$method(static::API_BASE.$path, $data);
 
         if ($response->failed()) {
             $errorMessage = $response->json()['errors'][0]['message'] ?? 'Cloudflare API request failed';

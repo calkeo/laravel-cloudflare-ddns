@@ -8,7 +8,7 @@ class InvalidConfigurationException extends Exception
 {
     public static function invalidData(array $errors): self
     {
-        $output = "Invalid Cloudflare DDNS configuration:";
+        $output = 'Invalid Cloudflare DDNS configuration:';
 
         foreach ($errors as $field => $messages) {
             foreach ($messages as $message) {
